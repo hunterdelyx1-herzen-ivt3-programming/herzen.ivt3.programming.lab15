@@ -6,10 +6,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class Second
 {
+    private static ExecutorService service = Executors.newCachedThreadPool();
+
     public static void main( String[] args )
     {
         CompletableFuture completableFuture = CompletableFuture.supplyAsync(
@@ -30,16 +34,21 @@ public class Second
                     if (image == null) return null;
 
                     Image tmp = image.getScaledInstance(100, -1, BufferedImage.SCALE_SMOOTH);
-                    BufferedImage new_image = new BufferedImage(tmp.getWidth(null), tmp.getHeight(null), BufferedImage.TYPE_INT_RGB);
-                    new_image.getGraphics().drawImage(tmp, 0, 0, null);
+                    image = new BufferedImage(tmp.getWidth(null), tmp.getHeight(null), BufferedImage.TYPE_INT_RGB);
+                    image.getGraphics().drawImage(tmp, 0, 0, null);
 
-                    for (int y = 0; y < new_image.getHeight(); y++) {
-                        for (int x = 0; x < new_image.getWidth(); x++) {
-                            Color color = new Color(new_image.getRGB(x, y));
-                            new_image.setRGB(x,y, color.brighter().getRGB());
+                    return image;
+                }
+        ).thenApply(
+                (resizedImage) -> {
+                    if (resizedImage == null) return null;
+                    for (int y = 0; y < resizedImage.getHeight(); y++) {
+                        for (int x = 0; x < resizedImage.getWidth(); x++) {
+                            Color color = new Color(resizedImage.getRGB(x, y));
+                            resizedImage.setRGB(x,y, color.brighter().getRGB());
                         }
                     }
-                    return new_image;
+                    return resizedImage;
                 }
         ).thenApply(
                 (resultImage) -> {
