@@ -12,8 +12,6 @@ import java.util.concurrent.Executors;
 
 public class Second
 {
-    private static ExecutorService service = Executors.newCachedThreadPool();
-
     public static void main( String[] args )
     {
         CompletableFuture completableFuture = CompletableFuture.supplyAsync(
@@ -28,7 +26,7 @@ public class Second
                     }
 
                     return image;
-                }, service
+                }
         ).thenApply(
                 (image) -> {
                     if (image == null) return null;

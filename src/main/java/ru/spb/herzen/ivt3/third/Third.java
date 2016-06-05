@@ -5,9 +5,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Third {
-    private static ExecutorService service = Executors.newCachedThreadPool();
-
     public static void main(String[] args) {
+        ExecutorService service = Executors.newCachedThreadPool();
+
         CompletableFuture<BookPageCounter> firstBook = CompletableFuture.supplyAsync(
                 () -> new BookPageCounter("J.D. Salinger: Catcher In The Rye"),
                 service);
