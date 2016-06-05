@@ -3,19 +3,18 @@ package ru.spb.herzen.ivt3.third;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.function.Function;
 
 public class Third {
     private static ExecutorService service = Executors.newCachedThreadPool();
 
     public static void main(String[] args) {
-        CompletableFuture<BookPageCounter> firstBook = CompletableFuture.supplyAsync(() -> {
-            return new BookPageCounter("J.D. Salinger: Catcher In The Rye");
-        }, service);
+        CompletableFuture<BookPageCounter> firstBook = CompletableFuture.supplyAsync(
+                () -> new BookPageCounter("J.D. Salinger: Catcher In The Rye"),
+                service);
 
-        CompletableFuture<BookPageCounter> secondBook = CompletableFuture.supplyAsync(() -> {
-            return new BookPageCounter("Dalton Trumbo: Johnny Got His Gun");
-        }, service);
+        CompletableFuture<BookPageCounter> secondBook = CompletableFuture.supplyAsync(
+                () -> new BookPageCounter("Dalton Trumbo: Johnny Got His Gun"),
+                service);
 
         CompletableFuture<BookPageCounter> pageAmountComparator = firstBook.thenCombine(secondBook, (first, second) -> {
             System.out.println(first.getName()  + " have " + first.getPageAmount()  + " words");
@@ -29,7 +28,9 @@ public class Third {
 
         try {
             System.out.println("\nSo " + pageAmountComparator.get().getName() + " have more words");
-        } catch (Exception exception) {}
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
 
         service.shutdown();
     }
