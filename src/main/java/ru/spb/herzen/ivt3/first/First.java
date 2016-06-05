@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -13,10 +14,10 @@ public class First
     {
         ExecutorService service = Executors.newCachedThreadPool();
 
-        Supplier<ArrayList<Double>> primeNumberSupplier = () -> {
-            ArrayList<Double> list = new ArrayList<>();
+        Supplier<ArrayList<Integer>> primeNumberSupplier = () -> {
+            ArrayList<Integer> list = new ArrayList<>();
 
-            for(double number = 2; number <= 10000000; number++) {
+            for(int number = 2; number <= 10000000; number++) {
                 boolean prime = true;
                 for(double divisor = 2; divisor <= Math.sqrt(number); divisor++) {
                     if (number % divisor == 0) {
@@ -25,9 +26,7 @@ public class First
                     }
                 }
 
-                if (prime) {
-                    list.add(number);
-                }
+                if (prime) list.add(number);
             }
 
             return list;
