@@ -28,7 +28,7 @@ public class Second
                     }
 
                     return image;
-                }
+                }, service
         ).thenApply(
                 (image) -> {
                     if (image == null) return null;
